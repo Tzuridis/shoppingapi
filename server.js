@@ -28,14 +28,14 @@ Storage.prototype.delete = function(id) {
 
 Storage.prototype.put = function(id, name){
         for (var i = 0; i < this.items.length; i++){
-            console.log(this.items[i].id == id)
+            // console.log(this.items[i].id == id)
             if(this.items[i].id == id) {
                 this.items[i].name = name;
-                break
+                return this.items[i]
             }
         }
-        console.log(this.items)
-        return
+        // console.log(this.items)
+        return {};
 }
 
 var storage = new Storage();
@@ -54,7 +54,7 @@ app.get('/items', function(request, response) {
 
 
 app.post('/items', jsonParser, function(request, response) {
-    console.log(request.body);
+    // console.log(request.body);
     if (!request.body) {
         return response.sendStatus(400);
     }
@@ -69,14 +69,15 @@ app.delete('/items/:id', function(request, response) {
     response.status(200).json(item);
 });
 
-app.put('/items/:id', jsonParser, function(request, response){
+app.put('/items/:id', jsonParser, function(request, response){ 
     if (!request.body) {
         return response.sendStatus(400);
     }
 
-     var item = storage.put(request.params.id, request.body.name);
+     var item = storage.put(request.params.id, request.body.name); //extraction
     response.status(201).json(item);
 })
 
-
+exports.app = app;
+exports.storage = storage;
 
